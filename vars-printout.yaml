@@ -1,0 +1,13 @@
+---
+kekec: KEKEC
+manageiq:
+  X_MIQ_Group: Tenant My Company access
+  api_token: 271db4a0420714c50abbafe37a05557e
+  api_url: 'http://localhost:4000'
+  automate_workspace: automate_workspaces/82632486-7529-45c6-8fa7-fc53ebbb157d
+  group: groups/1
+  user: users/1
+manageiq_connection:
+  X_MIQ_Group: Tenant My Company access
+  token: 271db4a0420714c50abbafe37a05557e
+  url: 'http://localhost:4000'
