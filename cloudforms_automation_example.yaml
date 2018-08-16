@@ -1,0 +1,127 @@
+---
+###############################################################################
+# Example of a Ansible playbook that can be executed when a Nuage Enterprise  #
+# is created.                                                                 #
+#                                                                             #
+# This will create a DomainTemplate with a few ZoneTemplates and              #
+# SubnetTemplates. It will also create a single domain based on that template.#
+#                                                                             #
+# Cloudforms integration                                                      #
+# ----------------------                                                      #
+# This example is meant to be used with Cloudforms, the Nuage Auth variable   #
+# is predefined in the example, but could also be retrieved as variables that #
+# were created when the automation class was defined. Or they could be        #
+# retrieved through the Cloudforms API from the provider.                     #
+#                                                                             #
+# The enterprise id will need to be retrieved from the event itself. This     #
+# playbook is designed to be executed when an event comes in of the creation  # 
+# of an Enterprise.                                                           #
+#                                                                             #
+# Requirements                                                                #
+# ------------                                                                #
+# Make sure the host running the playbook (typically the Cloudforms host) has #
+# the Python vspk module installed. This can be done with the command:        #
+# pip install vspk                                                            #
+#                                                                             #
+# Parameters overview                                                         #
+# -------------------                                                         #
+# nuage_auth:                                                                 #
+#   api_username: NUAGE USERNAME TO CONNECT TO VSD API                        #
+#   api_password: NUAGE USER PASSWORD TO CONNECT TO VSD API                   #
+#   api_enterprise: NUAGE ENTERPRISE TO CONNECT TO VSD API (Typically 'csp')  #
+#   api_url: NUAGE VSD URL (example: https://vsd.nuage.local:8443)            #
+#   api_version: NUAGE VSD API VERSION (Typically 'v5_0')                     #
+#                                                                             #
+###############################################################################
+
+- hosts: localhost
+  roles:
+  - xlab_si.nuage_miq_automate
+  tasks:
+  - name: Set the enterprise from the event information
+    set_fact:
+      enterprise_id: event.entity.ID
+
+  - name: Create DomainTemplate in Enterprise
+    delegate_to: localhost
+    nuage_vspk:
+      auth: "{{ nuage_auth }}"
+      type: DomainTemplate
+      parent_type: Enterprise
+      parent_id: "{{ enterprise_id }}"
+      state: present
+      match_filter: "name == 'DefaultTemplate'"
+      properties:
+        name: "DefaultTemplate"
+        description: "Template created automatically by Cloudforms when Enterprise is created"
+      children:
+      - type: ZoneTemplate
+        properties: 
+          name: "AppZone"
+        children:
+        - type: SubnetTemplate
+          match_filter: "name == 'AppNet'"
+          properties:
+            name: AppNet
+            address: 10.10.10.0
+            netmask: 255.255.255.0
+      - type: ZoneTemplate
+        properties: 
+          name: "DBZone"
+        children:
+        - type: SubnetTemplate
+          match_filter: "name == 'DBNet'"
+          properties:
+            name: DBNet
+            address: 10.10.20.0
+            netmask: 255.255.255.0
+      - type: ZoneTemplate
+        properties: 
+          name: "FrontZone"
+        children:
+        - type: SubnetTemplate
+          match_filter: "name == 'FrontNet'"
+          properties:
+            name: FrontNet
+            address: 10.10.30.0
+            netmask: 255.255.255.0
+      - type: ZoneTemplate
+        properties: 
+          name: "LBZone"
+        children:
+        - type: SubnetTemplate
+          match_filter: "name == 'LBNet'"
+          properties:
+            name: LBNet
+            address: 10.10.99.0
+            netmask: 255.255.255.0
+      - type: IngressACLTemplate
+        match_filter: "name == 'AllowAll'"
+        properties: 
+          name: AllowAll
+          active: true
+          allow_address_spoof: false
+          default_allow_ip: true
+          default_allow_non_ip: true
+      - type: EgressACLTemplate
+        match_filter: "name == 'AllowAll'"
+        properties: 
+          name: AllowAll
+          active: true
+          default_allow_ip: true
+          default_allow_non_ip: true
+          default_install_acl_implicit_rules: true
+    register: nuage_domain_template
+
+  - name: Create Domains from the template
+    delegate_to: localhost
+    nuage_vspk:
+      auth: "{{ nuage_auth }}"
+      type: Domain
+      parent_type: Enterprise 
+      parent_id: "{{ enterprise_id }}"
+      state: present
+      match_filter: "name == 'CloudformsAnsible'"
+      properties:
+        name: "CloudformsAnsible"
+        template_id: "{{ nuage_domain_template.id }}"
