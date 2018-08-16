@@ -50,6 +50,7 @@
   - debug: var=nuage_auth.api_enterprise
   - debug: var=nuage_auth.api_url
   - debug: var=nuage_auth.api_version
+  - debug: var=enterprise_id
 
   - name: Create DomainTemplate in Enterprise
     delegate_to: localhost
