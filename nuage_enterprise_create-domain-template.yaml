@@ -1,37 +1,10 @@
 ---
 ###############################################################################
-# Example of a Ansible playbook that can be executed when a Nuage Enterprise  #
-# is created.                                                                 #
+# Example of an Ansible playbook that can be executed when a Nuage Enterprise #
+# is created. The enterprise id is retrieved from the event itself.           #
 #                                                                             #
-# This will create a DomainTemplate with a few ZoneTemplates and              #
-# SubnetTemplates. It will also create a single domain based on that template.#
-#                                                                             #
-# Cloudforms integration                                                      #
-# ----------------------                                                      #
-# This example is meant to be used with Cloudforms, the Nuage Auth variable   #
-# is predefined in the example, but could also be retrieved as variables that #
-# were created when the automation class was defined. Or they could be        #
-# retrieved through the Cloudforms API from the provider.                     #
-#                                                                             #
-# The enterprise id will need to be retrieved from the event itself. This     #
-# playbook is designed to be executed when an event comes in of the creation  # 
-# of an Enterprise.                                                           #
-#                                                                             #
-# Requirements                                                                #
-# ------------                                                                #
-# Make sure the host running the playbook (typically the Cloudforms host) has #
-# the Python vspk module installed. This can be done with the command:        #
-# pip install vspk                                                            #
-#                                                                             #
-# Parameters overview                                                         #
-# -------------------                                                         #
-# nuage_auth:                                                                 #
-#   api_username: NUAGE USERNAME TO CONNECT TO VSD API                        #
-#   api_password: NUAGE USER PASSWORD TO CONNECT TO VSD API                   #
-#   api_enterprise: NUAGE ENTERPRISE TO CONNECT TO VSD API (Typically 'csp')  #
-#   api_url: NUAGE VSD URL (example: https://vsd.nuage.local:8443)            #
-#   api_version: NUAGE VSD API VERSION (Typically 'v5_0')                     #
-#                                                                             #
+# Will create a DomainTemplate with four ZoneTemplates and SubnetTemplates.   #
+# Will also instantiate the domain.                                           #
 ###############################################################################
 
 - hosts: localhost
@@ -45,7 +18,7 @@
 
   tasks:
   #
-  # Grab event data
+  # Grab event data.
   #
   - name: Set the enterprise from the event information
     set_fact:
@@ -53,7 +26,7 @@
   - debug: msg="Handling enterprise with ID - {{ enterprise_id }}"
 
   #
-  # Use
+  # Do some work.
   #
   - name: Create DomainTemplate in Enterprise
     delegate_to: localhost
