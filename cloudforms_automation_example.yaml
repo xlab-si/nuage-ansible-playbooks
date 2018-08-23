@@ -38,19 +38,23 @@
   connection: local
   gather_facts: False
   roles:
+  #
+  # Extracts 'nuage_auth' and 'event' variables out of Automation Workspace.
+  #
   - xlab_si.nuage_miq_automate
+
   tasks:
-  - name: "Install vspk"
-    pip:
-      name: vspk
-      state: present
-      version: 5.3.2
+  #
+  # Grab event data
+  #
   - name: Set the enterprise from the event information
     set_fact:
       enterprise_id: "{{ event.entity.ID }}"
-
   - debug: msg="Handling enterprise with ID - {{ enterprise_id }}"
 
+  #
+  # Use
+  #
   - name: Create DomainTemplate in Enterprise
     delegate_to: localhost
     nuage_vspk:
