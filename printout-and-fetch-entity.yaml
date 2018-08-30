@@ -3,9 +3,10 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  roles:
-  - role: xlab_si.nuage_miq_automate
+  vars:
     validate_certs: False
+  roles:
+  - xlab_si.nuage_miq_automate
   tasks:
   - debug: msg="I am a playbook running as event callback and I am able to access nuage credentials"
   - debug: var=nuage_auth
