@@ -1,0 +1,24 @@
+---
+- name: Nuage event callback
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+  - xlab_si.nuage_miq_automate
+  tasks:
+  - debug: msg="I am a playbook running as event callback and I am able to access nuage credentials"
+  - debug: var=nuage_auth
+  - debug: msg="As well as details of the event that triggered me"
+  - debug: var=event
+  - debug: msg="So I'm now ready to do some work!"
+
+  - name: Fetch entity from Nuage
+    delegate_to: localhost
+    nuage_vspk:
+      auth: "{{ nuage_auth }}"
+      type: "{{ event.entity_type | capitalize }}"
+      command: find
+      id: "{{ event.entity.ID }}"
+    register: entity
+    when: event.type == 'CREATE' or event.type == 'UPDATE'
+  - debug: var=entity
