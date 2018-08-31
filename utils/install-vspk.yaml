@@ -2,6 +2,8 @@
 - hosts: localhost
   connection: local
   gather_facts: False
+  vars:
+    manageiq_validate_certs: False
   tasks:
   - name: "Install vspk"
     pip:

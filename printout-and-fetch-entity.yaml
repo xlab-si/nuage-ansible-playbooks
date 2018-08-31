@@ -4,7 +4,7 @@
   connection: local
   gather_facts: False
   vars:
-    validate_certs: False
+    manageiq_validate_certs: False
   roles:
   - xlab_si.nuage_miq_automate
   tasks:

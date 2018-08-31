@@ -3,6 +3,8 @@
   hosts: localhost
   connection: local
   gather_facts: False
+  vars:
+    manageiq_validate_certs: False
   roles:
   - role: xlab_si.nuage_miq_automate
     validate_certs: False
