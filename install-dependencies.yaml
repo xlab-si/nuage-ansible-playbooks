@@ -1,0 +1,21 @@
+---
+#
+# Install pip dependencies for playbooks. You should run this playbook against all appliances with
+# Embedded Ansible server role. Also see:
+# https://docs.ansible.com/ansible-tower/latest/html/administration/tipsandtricks.html#using-virtualenv-with-at
+#
+- name: Install Embedded Ansible pip dependencies
+  hosts: appliances
+  gather_facts: False
+  vars:
+    pip_packages:
+      - { name: vspk, version: 5.3.2 }
+  tasks:
+  - name: Install pip packages for Embedded Ansible
+    pip:
+      name: '{{ item.name }}'
+      state: present
+      version: '{{ item.version }}'
+      virtualenv: /var/lib/awx/venv/ansible
+      umask: '0022'
+    with_items: '{{ pip_packages }}'
