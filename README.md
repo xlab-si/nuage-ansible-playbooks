@@ -5,11 +5,33 @@ started writing your own playbooks in a form that they can be triggered by
 CloudForms Automation Instances.
 
 ## Prerequisites
+### Dependent pip packages
 If your playbook depends on any pip package, you'll need to install it to appliance
 upfront or else playbook execution will error. Run the playbook listed below against
 your appliance(s) to do so.
 
 [install-dependencies.yaml](./install-dependencies.yaml)
+
+### Dependent roles
+If your playbook depends on external roles, you need to list them in
+
+```
+$PROJECT_ROOT/roles/requirements.yml
+```
+
+*NOTE: The roles/ directory **MUST** to be on top level of your repository, it cannot
+be nested in order for Embedded Ansible to automatically install it for you.*
+
+Embedded Ansible is smart enough to have them downloaded for you, please read
+[official documentation](https://docs.ansible.com/ansible/devel/reference_appendices/galaxy.html#installing-multiple-roles-from-a-file)
+on exact format of this file. It's best if you use roles published
+to [Ansible Galaxy](https://galaxy.ansible.com/) portal, but it's not required.
+
+As a last resort, you can manually bundle your roles in the roles/ directory:
+
+<pre>
+$PROJECT_ROOT/roles/<b>your_role</b>
+</pre>
 
 ## Example playbooks
 ### EX01: Playbook for Debugging
