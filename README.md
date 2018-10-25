@@ -58,7 +58,30 @@ type and ID are retrieved from payload of EMS event that triggered the execution
 This playbook requires **vspk** pip package installed on appliance, read the Prerequisites
 section to learn how to do it. 
 
-### EX03: Create DomainTemplate upon Enterprise CREATE
+### EX03: One more for debugging - with SSL cert validation
+Other debug playbooks have SSL certificate validation explicitly turned off my means of
+
+```yaml
+vars:
+  manageiq_validate_certs: False
+``` 
+
+But this is not the case with regular playbooks, therefore we provide yet another debug
+playbook:
+
+[printout-validate-certs.yaml](./printout-validate-certs.yaml)
+
+Cert validation is turned on by default for all playbooks which means playbook will fail
+with appliances that use self-signed certificates. This playbook can be used to validate
+whether certificate validation would succeed.
+
+You can turn SSL certificate validation off also in Automate explorer by defining
+**Input Parameter** for the playbook with a **False** default value
+(for arbitrary playbook):
+
+![](./docs/disable_validate_certs.png)
+
+### EX04: Create DomainTemplate upon Enterprise CREATE
 Finally a more real-world scenario playbook.
 
 Following playbook creates a Nuage DomainTemplate with some ZoneTemplates and
