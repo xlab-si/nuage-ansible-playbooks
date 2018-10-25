@@ -1,5 +1,4 @@
 ---
-kekec: KEKEC
 manageiq:
   X_MIQ_Group: Tenant My Company access
   api_token: 505b9d19811d361d4c7a24ff8fa3540f
