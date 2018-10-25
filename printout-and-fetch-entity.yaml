@@ -15,7 +15,6 @@
   - debug: msg="So I'm now ready to do some work!"
 
   - name: Fetch entity from Nuage
-    delegate_to: localhost
     nuage_vspk:
       auth: "{{ nuage_auth }}"
       type: "{{ event.entity_type | capitalize }}"

@@ -29,7 +29,6 @@
   # Do some work.
   #
   - name: Create DomainTemplate in Enterprise
-    delegate_to: localhost
     nuage_vspk:
       auth: "{{ nuage_auth }}"
       type: DomainTemplate
@@ -100,7 +99,6 @@
     register: nuage_domain_template
 
   - name: Create Domains from the template
-    delegate_to: localhost
     nuage_vspk:
       auth: "{{ nuage_auth }}"
       type: Domain
