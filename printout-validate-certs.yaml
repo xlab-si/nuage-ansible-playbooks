@@ -4,9 +4,9 @@
   connection: local
   gather_facts: False
   vars:
-    manageiq_validate_certs: False
+    manageiq_validate_certs: True
   pre_tasks:
-  - debug: msg="Running printout"
+  - debug: msg="Running printout with cert validation"
   roles:
   - role: xlab_si.nuage_miq_automate
     validate_certs: False
@@ -15,4 +15,4 @@
   - debug: var=nuage_auth
   - debug: msg="As well as details of the event that triggered me"
   - debug: var=event
-  - debug: msg="So I'm now ready to do some work!"
+  - debug: msg="So I'm now ready to do some work (and the certs are valid)!"

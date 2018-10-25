@@ -5,6 +5,8 @@
   gather_facts: False
   vars:
     manageiq_validate_certs: False
+  pre_tasks:
+  - debug: msg="Running printout with fetch entity"
   roles:
   - xlab_si.nuage_miq_automate
   tasks:
