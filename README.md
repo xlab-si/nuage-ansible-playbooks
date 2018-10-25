@@ -20,7 +20,7 @@ $PROJECT_ROOT/roles/requirements.yml
 ```
 
 *NOTE: The roles/ directory **MUST** to be on top level of your repository, it cannot
-be nested in order for Embedded Ansible to automatically install it for you.*
+be nested in order for Embedded Ansible to automatically install requirements for you.*
 
 Embedded Ansible is smart enough to have them downloaded for you, please read
 [official documentation](https://docs.ansible.com/ansible/devel/reference_appendices/galaxy.html#installing-multiple-roles-from-a-file)
